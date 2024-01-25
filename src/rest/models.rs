@@ -113,7 +113,7 @@ pub enum ResultType {
 pub struct ApplicantData {
     pub result: String,
     pub live: bool,
-    pub similarity: i64,
+    pub similarity: f64,
     pub document_type: String,
     #[serde(rename = "generalDocuments")]
     pub general_documents: Vec<GeneralDocument>,
@@ -129,4 +129,92 @@ pub struct ApplicantData {
     pub screening_matches: Option<Vec<ScreeningMatch>>,
     #[serde(rename = "technicalDetails")]
     pub technical_details: Option<TechnicalDetails>,
+}
+
+
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+    #[test]
+    fn test_json_body() {
+        let json_body = r#"
+        {
+            "result":"rejected",
+            "similarity":0.6550394743680953,
+            "live":true,
+            "document_type":"id",
+            "generalDocuments":[
+               
+            ],
+            "reject_reason":{
+               "value":"face_mismatch",
+               "description":""
+            },
+            "result_comment":"3123",
+            "name":"SPECIMEN SPECIMEN",
+            "face_images":1,
+            "id_card_front":{
+               "Given_Names_en_US":"MARIANA",
+               "Surname_en_US":"TKACHENKO",
+               "Given_Names_ka_GE":"\u0410\u0420\u042f\u041d\u0410",
+               "Surname_ka_GE":"\u0422\u041a\u0410\u0427\u0415\u041d\u041a\u041e",
+               "Nationality_Code_en_US":"UKR",
+               "Sex_en_US":"F",
+               "Document_Number_en_US":"000000000",
+               "Nationality_en_US":"UKR",
+               "Issuing_State_Code_en_US":"UKR",
+               "localMiddleName":"\u0406\u0412\u0410\u041d\u0407\u0412\u041d\u0410"
+            },
+            "id_card_back":{
+               "Personal_Number_en_US":"05781305459",
+               "Issuing_State_Code_en_US":"HRV",
+               "Authority_en_US":"PU SPLITSKO",
+               "Address_en_US":"SPLIT SPLIT EZA MUTIMIRA 2",
+               "Given_Names_en_US":"SPECIMEN",
+               "Surname_en_US":"SPECIMEN",
+               "Nationality_Code_en_US":"HRV",
+               "Sex_en_US":"F",
+               "Date_of_Birth_en_US":"11\/25\/1979",
+               "Date_of_Expiry_en_US":"8\/2\/2026",
+               "Document_Number_en_US":"115501830",
+               "Nationality_en_US":"HRV",
+               "Date_of_Birth_ISO":"1979-11-25T00:00:00.000Z",
+               "Date_of_Expiry_ISO":"2026-08-02T00:00:00.000Z",
+               "mrz":"IOHRV115501830605781305459<<<<\n7911255F2608020HRV<<<<<<<<<<<5\nSPECIMEN<<SPECIMEN<<<<<<<<<<<<"
+            },
+            "suggested":{
+               
+            },
+            "person":{
+               "local_first_name":"\u0410\u0420\u042f\u041d\u0410",
+               "local_last_name":"\u0422\u041a\u0410\u0427\u0415\u041d\u041a\u041e",
+               "first_name":"SPECIMEN",
+               "last_name":"SPECIMEN",
+               "nationality":"HRV",
+               "document_number":"115501830",
+               "issuing_state":"HRV",
+               "sex":"F",
+               "local_middle_name":"\u0406\u0412\u0410\u041d\u0407\u0412\u041d\u0410",
+               "birthday":"11\/25\/1979",
+               "birthday_time":"1979-11-25T00:00:00.000Z",
+               "age":44,
+               "document_expires":"8\/2\/2026",
+               "document_expires_time":"2026-08-02T00:00:00.000Z",
+               "personal_number":"05781305459",
+               "authority":"PU SPLITSKO",
+               "address":"SPLIT SPLIT EZA MUTIMIRA 2",
+               "status":"FIELDS_MISMATCH",
+               "mrz":"IOHRV115501830605781305459<<<<\n7911255F2608020HRV<<<<<<<<<<<5\nSPECIMEN<<SPECIMEN<<<<<<<<<<<<"
+            },
+            "technicalDetails":{
+               "remoteAddress":"84.43.240.162",
+               "userAgent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/120.0.0.0 Safari\/537.36",
+               "countryCode":"BG"
+            }
+         }
+        "#;
+        let person: ApplicantData = serde_json::from_str(json_body).unwrap();
+        assert!(person.result =="rejected");
+    }
 }

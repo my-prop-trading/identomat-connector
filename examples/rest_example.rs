@@ -5,7 +5,8 @@ use uuid::Uuid;
 #[tokio::main]
 async fn main() {
     let company_key = std::env::var("COMPANY_KEY").unwrap();
-    let client = IdentomatRestClient::new_with_config(company_key, IdentomatConfig::test_env());
+    let client = IdentomatRestClient::new_with_config(company_key, 
+        IdentomatConfig::test_env());
     let client_id = Uuid::new_v4().to_string();
     let poi_token = get_poi_token(&client, client_id.as_str()).await;
     let _ = get_applicant(&client, poi_token.as_str()).await;
