@@ -36,7 +36,8 @@ impl IdentomatRestClient {
                 //"document_types": ["driver_license", "residence_license"],
                 "skip_agreement": true,
                 "allow_document_upload":true,
-                "language": "en"
+                "language": "en",
+                "skip_desktop": false
             }
         });
 
