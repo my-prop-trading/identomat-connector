@@ -10,12 +10,12 @@ pub struct CreateAccessTokenResponse {
 pub struct Final {
     #[serde(rename = "documentIssued")]
     pub document_issued: String,
-    #[serde(rename = "formattedAddress")]
-    pub formatted_address: String,
-    #[serde(rename = "issuingAuthority")]
-    pub issuing_authority: String,
-    #[serde(rename = "documentExpires")]
-    pub document_expires: String,
+    #[serde(rename = "formattedAddress", skip_serializing_if = "Option::is_none")]
+    pub formatted_address: Option<String>,
+    #[serde(rename = "issuingAuthority", skip_serializing_if = "Option::is_none")]
+    pub issuing_authority: Option<String>,
+    #[serde(rename = "documentExpires", skip_serializing_if = "Option::is_none")]
+    pub document_expires: Option<String>,
     #[serde(rename = "fullName")]
     pub full_name: String,
 }
