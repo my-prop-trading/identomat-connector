@@ -8,8 +8,8 @@ pub struct CreateAccessTokenResponse {
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Final {
-    #[serde(rename = "documentIssued")]
-    pub document_issued: String,
+    #[serde(rename = "documentIssued", skip_serializing_if = "Option::is_none")]
+    pub document_issued: Option<String>,
     #[serde(rename = "formattedAddress", skip_serializing_if = "Option::is_none")]
     pub formatted_address: Option<String>,
     #[serde(rename = "issuingAuthority", skip_serializing_if = "Option::is_none")]
@@ -297,6 +297,82 @@ mod tests {
                 "userAgent":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/120.0.0.0 Safari\/537.36",
                 "countryCode":"BG"
             }
+            }
+        "#;
+        let person: ApplicantData = serde_json::from_str(json_body).unwrap();
+        assert!(person.result == "approved");
+    }
+
+    #[test]
+    fn test_poa_json_body_documentIssued_optional() {
+        let json_body = r#"
+            {
+                "result": "approved",
+                "similarity": 0,
+                "live": false,
+                "document_type": "",
+                "generalDocuments": [
+                    {
+                        "pages": [
+                            {
+                                "typeId": "bank-statement",
+                                "final": {
+                                    "street": "Test Tokoev Street",
+                                    "state": "Bishkek City",
+                                    "city": "Bishkek",
+                                    "country": "Kyrgyzstan",
+                                    "postalCode": "720000",
+                                    "streetNumber": "99",
+                                    "countryCode": "KGZ",
+                                    "authority": "\u043e\u0430\u043e \u00ab\u043e\u043f\u0442\u0438\u043c\u0430 \u0431\u0430\u043d\u043a\u00bb \u0430\u0430\u043a \u00aboptima banke ojsc",
+                                    "address": "test tokoeva street, 99\/2",
+                                    "formattedAddress": "99 Test Tokoev St, Bishkek 720000, Kyrgyzstan",
+                                    "latitude": 42.8248407,
+                                    "longitude": 74.61463230000001,
+                                    "fullName": "yurets ogurets",
+                                    "firstName": "yurets",
+                                    "lastName": "ogurets",
+                                    "registrationNumber": "7698",
+                                    "permanent": null,
+                                    "county": null,
+                                    "sublocality": "Oktyabr District",
+                                    "houseNumber": null,
+                                    "postalTown": null,
+                                    "localType": "ROOFTOP",
+                                    "documentIssuedTime": "2024-07-23T00:00:00.000Z"
+                                },
+                                "documentPages": [
+                                    {
+                                        "pageNumber": 1
+                                    }
+                                ],
+                                "pageNumber": 1,
+                                "statuses": [
+                                    "issued-date-was-not-found"
+                                ]
+                            }
+                        ],
+                        "documentType": "BANK_STATEMENT",
+                        "permanent": null,
+                        "typeId": "bank_statement"
+                    }
+                ],
+                "reject_reason": {
+                    "value": "",
+                    "description": ""
+                },
+                "result_comment": "approve in database",
+                "name": "yurets ogurets",
+                "face_images": 0,
+                "suggested": {},
+                "person": {
+                    "address": "53 Test Tokoev St, Bishkek 720000, Kyrgyzstan"
+                },
+                "technicalDetails": {
+                    "remoteAddress": "127.0.0.1",
+                    "userAgent": "Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit\/605.1.15 (KHTML, like Gecko) Version\/17.5 Safari\/605.1.15",
+                    "countryCode": "KG"
+                }
             }
         "#;
         let person: ApplicantData = serde_json::from_str(json_body).unwrap();
