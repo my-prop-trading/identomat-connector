@@ -304,7 +304,7 @@ mod tests {
     }
 
     #[test]
-    fn test_poa_json_body_documentIssued_optional() {
+    fn test_poa_json_body_document_issued_optional() {
         let json_body = r#"
             {
                 "result": "approved",

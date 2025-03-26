@@ -1,5 +1,8 @@
 use std::fmt;
 use std::error::Error as StdError;
+
+use flurl::FlUrlError;
+use http::status::InvalidStatusCode;
 pub struct IdentomatError {
     pub message: String,
 }
@@ -22,9 +25,16 @@ impl StdError for IdentomatError {
     }
 }
 
+impl From<FlUrlError> for IdentomatError {
+    fn from(error: FlUrlError) -> Self {
+        IdentomatError {
+            message: error.to_string(),  // You can customize the message
+        }
+    }
+}
 
-impl From<reqwest::Error> for IdentomatError {
-    fn from(error: reqwest::Error) -> Self {
+impl From<InvalidStatusCode> for IdentomatError {
+    fn from(error: InvalidStatusCode) -> Self {
         IdentomatError {
             message: error.to_string(),
         }
